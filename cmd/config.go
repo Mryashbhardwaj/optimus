@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/odpf/optimus/cmd/internal"
 	"github.com/odpf/optimus/config"
 	"github.com/odpf/salt/log"
 	cli "github.com/spf13/cobra"
@@ -16,6 +17,7 @@ const (
 )
 
 func configCommand(l log.Logger) *cli.Command {
+	internal.Example()
 	c := &cli.Command{
 		Use:   "config",
 		Short: "Manage optimus configuration required to deploy specifications",
