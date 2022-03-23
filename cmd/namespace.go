@@ -7,7 +7,7 @@ import (
 	"github.com/odpf/salt/log"
 )
 
-func askToSelectNamespace(l log.Logger, conf config.ProjectConfig) *config.Namespace {
+func askToSelectNamespace(l log.Logger, conf config.ClientConfig) *config.Namespace {
 	options := make([]string, len(conf.Namespaces))
 	for i, namespace := range conf.Namespaces {
 		options[i] = namespace.Name

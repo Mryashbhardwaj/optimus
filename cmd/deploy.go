@@ -46,7 +46,7 @@ func deployCommand(l log.Logger, pluginRepo models.PluginRepository, dsRepo mode
 	)
 
 	// TODO: find a way to load the config in one place
-	conf, err := config.LoadProjectConfig()
+	conf, err := config.LoadClientConfig()
 	if err != nil {
 		l.Error(err.Error())
 		return nil
@@ -86,7 +86,7 @@ func deployCommand(l log.Logger, pluginRepo models.PluginRepository, dsRepo mode
 }
 
 // postDeploymentRequest send a deployment request to service
-func postDeploymentRequest(l log.Logger, conf config.ProjectConfig, pluginRepo models.PluginRepository,
+func postDeploymentRequest(l log.Logger, conf config.ClientConfig, pluginRepo models.PluginRepository,
 	datastoreRepo models.DatastoreRepo, datastoreSpecFs map[string]map[string]afero.Fs, namespaceNames []string,
 	ignoreJobDeployment, ignoreResources, verbose bool) error {
 	dialTimeoutCtx, dialCancel := context.WithTimeout(context.Background(), OptimusDialTimeout)
@@ -142,7 +142,7 @@ func postDeploymentRequest(l log.Logger, conf config.ProjectConfig, pluginRepo m
 
 func deployAllJobs(deployTimeoutCtx context.Context,
 	runtime pb.RuntimeServiceClient,
-	l log.Logger, conf config.ProjectConfig, pluginRepo models.PluginRepository,
+	l log.Logger, conf config.ClientConfig, pluginRepo models.PluginRepository,
 	datastoreRepo models.DatastoreRepo,
 	namespaceNames []string,
 	verbose bool,
@@ -240,7 +240,7 @@ func deployAllJobs(deployTimeoutCtx context.Context,
 
 func deployAllResources(deployTimeoutCtx context.Context,
 	runtime pb.RuntimeServiceClient,
-	l log.Logger, conf config.ProjectConfig, pluginRepo models.PluginRepository,
+	l log.Logger, conf config.ClientConfig, pluginRepo models.PluginRepository,
 	datastoreRepo models.DatastoreRepo,
 	datastoreSpecFs map[string]map[string]afero.Fs,
 	namespaceNames []string,
@@ -343,7 +343,7 @@ func deployAllResources(deployTimeoutCtx context.Context,
 
 func registerAllNamespaces(
 	deployTimeoutCtx context.Context, runtime pb.RuntimeServiceClient,
-	l log.Logger, conf config.ProjectConfig, namespaceNames []string,
+	l log.Logger, conf config.ClientConfig, namespaceNames []string,
 ) error {
 	var selectedNamespaceNames []string
 	if len(namespaceNames) > 0 {
@@ -374,7 +374,7 @@ func registerAllNamespaces(
 }
 
 func registerNamespace(deployTimeoutCtx context.Context, runtime pb.RuntimeServiceClient,
-	l log.Logger, conf config.ProjectConfig, namespaceName string,
+	l log.Logger, conf config.ClientConfig, namespaceName string,
 ) error {
 	namespace, err := conf.GetNamespaceByName(namespaceName)
 	if err != nil {
@@ -402,7 +402,7 @@ func registerNamespace(deployTimeoutCtx context.Context, runtime pb.RuntimeServi
 
 func registerProject(
 	deployTimeoutCtx context.Context, runtime pb.RuntimeServiceClient,
-	l log.Logger, conf config.ProjectConfig,
+	l log.Logger, conf config.ClientConfig,
 ) (err error) {
 	projectSpec := &pb.ProjectSpecification{
 		Name:   conf.Project.Name,

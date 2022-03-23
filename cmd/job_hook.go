@@ -15,7 +15,7 @@ import (
 	cli "github.com/spf13/cobra"
 )
 
-func jobAddHookCommand(l log.Logger, conf config.ProjectConfig, pluginRepo models.PluginRepository) *cli.Command {
+func jobAddHookCommand(l log.Logger, conf config.ClientConfig, pluginRepo models.PluginRepository) *cli.Command {
 	cmd := &cli.Command{
 		Use:     "addhook",
 		Aliases: []string{"add_hook", "add-hook", "addHook", "attach_hook", "attach-hook", "attachHook"},
