@@ -113,11 +113,12 @@ func New(plainLog log.Logger, jsonLog log.Logger, pluginRepo models.PluginReposi
 	cmd.AddCommand(jobCommand(plainLog, pluginRepo))
 	cmd.AddCommand(deployCommand(plainLog, pluginRepo, dsRepo))
 	cmd.AddCommand(resourceCommand(plainLog, dsRepo))
-	cmd.AddCommand(serveCommand(jsonLog))
 	cmd.AddCommand(replayCommand(plainLog))
 	cmd.AddCommand(backupCommand(plainLog, dsRepo))
 	cmd.AddCommand(adminCommand(plainLog))
 	cmd.AddCommand(secretCommand(plainLog))
+
+	cmd.AddCommand(serveCommand())
 
 	addExtensionCommand(cmd, plainLog)
 	return cmd
