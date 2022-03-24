@@ -21,16 +21,16 @@ func serveCommand() *cli.Command {
 		},
 	}
 
-	// TODO: find a way to load the config in one place
-	conf, err := config.LoadOptimusConfig()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// initiate jsonLogger
-	jsonLogger := initLogger(jsonLoggerType, conf.Log)
-
 	c.RunE = func(c *cli.Command, args []string) error {
+		// TODO: find a way to load the config in one place
+		conf, err := config.LoadOptimusConfig()
+		if err != nil {
+			panic(err.Error())
+		}
+
+		// initiate jsonLogger
+		jsonLogger := initLogger(jsonLoggerType, conf.Log)
+
 		// initiate plugin log level
 		pluginLogLevel := hclog.Info
 		if conf.Log.Level == config.LogLevelDebug {
