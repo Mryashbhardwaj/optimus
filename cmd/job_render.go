@@ -16,7 +16,7 @@ import (
 	cli "github.com/spf13/cobra"
 )
 
-func jobRenderTemplateCommand(l log.Logger, conf config.ClientConfig, pluginRepo models.PluginRepository) *cli.Command {
+func jobRenderTemplateCommand(l log.Logger, conf *config.ClientConfig, pluginRepo models.PluginRepository) *cli.Command {
 	cmd := &cli.Command{
 		Use:     "render",
 		Short:   "Apply template values in job specification to current 'render' directory",

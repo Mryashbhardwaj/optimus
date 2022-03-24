@@ -5,9 +5,7 @@ import (
 	"io/ioutil"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/odpf/optimus/cmd/internal"
 	"github.com/odpf/optimus/config"
-	"github.com/odpf/salt/log"
 	cli "github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -16,17 +14,16 @@ const (
 	defaultHost = "localhost"
 )
 
-func configCommand(l log.Logger) *cli.Command {
-	internal.Example()
+func configCommand() *cli.Command {
 	c := &cli.Command{
 		Use:   "config",
 		Short: "Manage optimus configuration required to deploy specifications",
 	}
-	c.AddCommand(configInitCommand(l))
+	c.AddCommand(configInitCommand())
 	return c
 }
 
-func configInitCommand(l log.Logger) *cli.Command {
+func configInitCommand() *cli.Command {
 	c := &cli.Command{
 		Use:   "init",
 		Short: "Initialize optimus configuration file",
@@ -97,6 +94,8 @@ func configInitCommand(l log.Logger) *cli.Command {
 			if err := ioutil.WriteFile(fmt.Sprintf("%s.%s", config.DefaultFilename, config.DefaultFileExtension), confMarshaled, 0655); err != nil {
 				return err
 			}
+
+			l := initLogger(plainLoggerType, conf.Log)
 			l.Info(coloredSuccess("Configuration initialised successfully"))
 			return nil
 		},

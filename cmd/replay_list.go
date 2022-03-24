@@ -14,7 +14,7 @@ import (
 	cli "github.com/spf13/cobra"
 )
 
-func replayListCommand(l log.Logger, conf config.ClientConfig) *cli.Command {
+func replayListCommand(l log.Logger, conf *config.ClientConfig) *cli.Command {
 	var (
 		projectName string
 		reCmd       = &cli.Command{

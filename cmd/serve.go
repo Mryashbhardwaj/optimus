@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"strings"
 
 	"github.com/hashicorp/go-hclog"
 	hPlugin "github.com/hashicorp/go-plugin"
@@ -30,12 +29,12 @@ func serveCommand() *cli.Command {
 	}
 
 	// initiate jsonLogger
-	jsonLogger := initLogger(jsonLogger, conf.Log)
+	jsonLogger := initLogger(jsonLoggerType, conf.Log)
 
 	c.RunE = func(c *cli.Command, args []string) error {
 		// initiate plugin log level
 		pluginLogLevel := hclog.Info
-		if strings.ToUpper(conf.Log.Level) == string(config.LogLevelDebug) {
+		if conf.Log.Level == config.LogLevelDebug {
 			pluginLogLevel = hclog.Debug
 		}
 
