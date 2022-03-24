@@ -6,7 +6,6 @@ import (
 	"github.com/MakeNowJust/heredoc"
 	"github.com/odpf/optimus/config"
 	"github.com/odpf/optimus/models"
-	"github.com/odpf/salt/log"
 	cli "github.com/spf13/cobra"
 )
 
@@ -16,8 +15,8 @@ const (
 
 func backupCommand(datastoreRepo models.DatastoreRepo) *cli.Command {
 	var configFilePath string
-	var conf = &config.ClientConfig{}
-	var l log.Logger = initLogger(plainLoggerType, conf.Log)
+	conf := &config.ClientConfig{}
+	l := initLogger(plainLoggerType, conf.Log)
 
 	cmd := &cli.Command{
 		Use:   "backup",

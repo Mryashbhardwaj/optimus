@@ -25,7 +25,6 @@ func serveCommand() *cli.Command {
 	conf, err := config.LoadOptimusConfig()
 	if err != nil {
 		panic(err.Error())
-		return nil
 	}
 
 	// initiate jsonLogger

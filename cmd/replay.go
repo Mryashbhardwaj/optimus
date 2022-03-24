@@ -7,7 +7,6 @@ import (
 	pb "github.com/odpf/optimus/api/proto/odpf/optimus/core/v1beta1"
 	"github.com/odpf/optimus/config"
 	"github.com/odpf/optimus/core/set"
-	"github.com/odpf/salt/log"
 	cli "github.com/spf13/cobra"
 )
 
@@ -53,8 +52,8 @@ func formatRunsPerJobInstance(instance *pb.ReplayExecutionTreeNode, taskReruns m
 
 func replayCommand() *cli.Command {
 	var configFilePath string
-	var conf = &config.ClientConfig{}
-	var l log.Logger = initLogger(plainLoggerType, conf.Log)
+	conf := &config.ClientConfig{}
+	l := initLogger(plainLoggerType, conf.Log)
 
 	cmd := &cli.Command{
 		Use:   "replay",

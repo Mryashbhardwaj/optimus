@@ -9,8 +9,8 @@ import (
 // adminCommand registers internal administration commands
 func adminCommand() *cli.Command {
 	var configFilePath string
-	var conf = &config.ClientConfig{}
-	var l log.Logger = initLogger(plainLoggerType, conf.Log)
+	conf := &config.ClientConfig{}
+	l := initLogger(plainLoggerType, conf.Log)
 
 	cmd := &cli.Command{
 		Use:    "admin",
