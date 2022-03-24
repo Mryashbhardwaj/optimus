@@ -23,7 +23,7 @@ func serveCommand() *cli.Command {
 	}
 
 	// TODO: find a way to load the config in one place
-	conf, err := config.LoadServerConfig()
+	conf, err := config.LoadOptimusConfig()
 	if err != nil {
 		panic(err.Error())
 		return nil

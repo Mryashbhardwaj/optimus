@@ -268,8 +268,8 @@ func checkRequiredConfigs(conf config.Serve) error {
 	return nil
 }
 
-func Initialize(l log.Logger, conf config.ServerConfig) error {
-	if err := checkRequiredConfigs(conf.Serve); err != nil {
+func Initialize(l log.Logger, conf config.Optimus) error {
+	if err := checkRequiredConfigs(conf.Server); err != nil {
 		return err
 	}
 	l.Info("starting optimus", "version", config.BuildVersion)
@@ -278,16 +278,16 @@ func Initialize(l log.Logger, conf config.ServerConfig) error {
 	}
 
 	// setup db
-	if err := postgres.Migrate(conf.Serve.DB.DSN); err != nil {
+	if err := postgres.Migrate(conf.Server.DB.DSN); err != nil {
 		return fmt.Errorf("postgres.Migrate: %w", err)
 	}
-	dbConn, err := postgres.Connect(conf.Serve.DB.DSN, conf.Serve.DB.MaxIdleConnection,
-		conf.Serve.DB.MaxOpenConnection, l.Writer())
+	dbConn, err := postgres.Connect(conf.Server.DB.DSN, conf.Server.DB.MaxIdleConnection,
+		conf.Server.DB.MaxOpenConnection, l.Writer())
 	if err != nil {
 		return fmt.Errorf("postgres.Connect: %w", err)
 	}
 
-	jobCompiler := compiler.NewCompiler(conf.Serve.IngressHost)
+	jobCompiler := compiler.NewCompiler(conf.Server.IngressHost)
 	// init default scheduler
 	switch conf.Scheduler.Name {
 	case "airflow":
@@ -316,7 +316,7 @@ func Initialize(l log.Logger, conf config.ServerConfig) error {
 	)
 
 	// used to encrypt secrets
-	appHash, err := models.NewApplicationSecret(conf.Serve.AppKey)
+	appHash, err := models.NewApplicationSecret(conf.Server.AppKey)
 	if err != nil {
 		return fmt.Errorf("NewApplicationSecret: %w", err)
 	}
@@ -383,7 +383,7 @@ func Initialize(l log.Logger, conf config.ServerConfig) error {
 	// Make sure that log statements internal to gRPC library are logged using the logrus logger as well.
 	grpc_logrus.ReplaceGrpcLogger(grpcLogrusEntry)
 
-	grpcAddr := fmt.Sprintf("%s:%d", conf.Serve.Host, conf.Serve.Port)
+	grpcAddr := fmt.Sprintf("%s:%d", conf.Server.Host, conf.Server.Port)
 	grpcOpts := []grpc.ServerOption{
 		grpc_middleware.WithUnaryServerChain(
 			grpctags.UnaryServerInterceptor(grpctags.WithFieldExtractor(grpctags.CodeGenRequestFieldExtractor)),
@@ -429,9 +429,9 @@ func Initialize(l log.Logger, conf config.ServerConfig) error {
 		},
 	)
 	replayManager := job.NewManager(l, replayWorkerFactory, replaySpecRepoFac, utils.NewUUIDProvider(), job.ReplayManagerConfig{
-		NumWorkers:    conf.Serve.ReplayNumWorkers,
-		WorkerTimeout: conf.Serve.ReplayWorkerTimeout,
-		RunTimeout:    conf.Serve.ReplayRunTimeout,
+		NumWorkers:    conf.Server.ReplayNumWorkers,
+		WorkerTimeout: conf.Server.ReplayWorkerTimeout,
+		RunTimeout:    conf.Server.ReplayRunTimeout,
 	}, models.BatchScheduler, replayValidator, replaySyncer)
 	backupRepoFac := backupRepoFactory{
 		db: dbConn,
